@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BINGO Token — The Living Token</title>
+<meta name="description" content="1 BINGO for every human alive. Supply breathes with humanity. Daily lottery. Coming soon to BNB Chain.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050508;
+  --gold: #f59e0b;
+  --gold-light: #fbbf24;
+  --gold-glow: rgba(245,158,11,0.15);
+  --gold-glow-strong: rgba(245,158,11,0.4);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: #e2e8f0;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+canvas#bgCanvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 60px 24px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Logo */
+.logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light), #fff, var(--gold));
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s ease infinite;
+  margin-bottom: 8px;
+  letter-spacing: -2px;
+}
+
+.logo-icon {
+  font-size: 4rem;
+  margin-bottom: 16px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(245,158,11,0.1), 0 0 60px rgba(245,158,11,0.05); }
+  50% { box-shadow: 0 0 40px rgba(245,158,11,0.2), 0 0 80px rgba(245,158,11,0.1); }
+}
+
+.tagline {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 48px;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+.tagline em {
+  color: var(--gold);
+  font-style: normal;
+  font-weight: 500;
+}
+
+/* Features */
+.features {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 48px;
+  width: 100%;
+}
+
+.feature {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 28px 20px;
+  transition: all 0.3s ease;
+}
+
+.feature:hover {
+  border-color: rgba(245,158,11,0.3);
+  background: rgba(245,158,11,0.03);
+  transform: translateY(-2px);
+}
+
+.feature-icon {
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+
+.feature h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #fff;
+}
+
+.feature p {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.5;
+}
+
+/* Coming Soon Badge */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(245,158,11,0.08);
+  border: 1px solid rgba(245,158,11,0.2);
+  border-radius: 100px;
+  padding: 10px 24px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--gold);
+  margin-bottom: 32px;
+  animation: pulse-glow 3s ease infinite;
+}
+
+.badge-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+  animation: blink 1.5s ease infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* Big number */
+.supply-display {
+  margin-bottom: 48px;
+}
+
+.supply-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 4rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -1px;
+}
+
+.supply-label {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.35);
+  margin-top: 4px;
+}
+
+/* Contract */
+.contract-box {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 16px 24px;
+  margin-bottom: 32px;
+  width: 100%;
+}
+
+.contract-label {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.contract-addr {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.85rem;
+  color: var(--gold);
+  word-break: break-all;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.contract-addr:hover {
+  color: var(--gold-light);
+}
+
+.copied {
+  font-size: 0.75rem;
+  color: #22c55e;
+  margin-top: 4px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* Chain badge */
+.chain {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 24px;
+}
+
+.chain-dot {
+  width: 6px;
+  height: 6px;
+  background: #f0b90b;
+  border-radius: 50%;
+}
+
+/* Quote */
+.quote {
+  font-size: 1.1rem;
+  font-style: italic;
+  color: rgba(255,255,255,0.25);
+  line-height: 1.7;
+  max-width: 500px;
+  margin-top: 48px;
+}
+
+/* Links */
+.links {
+  display: flex;
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.links a {
+  color: rgba(255,255,255,0.3);
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: color 0.2s;
+}
+
+.links a:hover {
+  color: var(--gold);
+}
+
+/* Desc */
+.desc {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.35);
+  line-height: 1.7;
+  max-width: 540px;
+  margin-bottom: 36px;
+}
+
+/* Lottery */
+.lottery-section {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(245,158,11,0.05), rgba(245,158,11,0.02));
+  border: 1px solid rgba(245,158,11,0.15);
+  border-radius: 20px;
+  padding: 36px 28px;
+  margin-bottom: 32px;
+  animation: pulse-glow 3s ease infinite;
+}
+
+.lottery-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--gold);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.lottery-clock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.lottery-unit {
+  text-align: center;
+}
+
+.lottery-num {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 3.2rem;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 8px 18px;
+  min-width: 80px;
+  transition: transform 0.15s;
+}
+
+.lottery-sub {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 6px;
+}
+
+.lottery-sep {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.5rem;
+  color: rgba(255,255,255,0.2);
+  padding-bottom: 20px;
+}
+
+.lottery-info {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.lottery-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lottery-stat-label {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.lottery-stat-value {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--gold-light);
+}
+
+.lottery-cta {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.35);
+  font-style: italic;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .logo { font-size: 3.5rem; }
+  .tagline { font-size: 1.15rem; }
+  .features { grid-template-columns: 1fr; }
+  .supply-num { font-size: 2.8rem; }
+  .lottery-num { font-size: 2.2rem; min-width: 60px; padding: 6px 12px; }
+  .lottery-info { gap: 20px; }
+  .container { padding: 40px 20px; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+
+<div class="container">
+  
+  <div class="logo-icon">🎰</div>
+  <div class="logo">BINGO</div>
+  <p class="tagline">The Living Token — <em>1 for every human alive</em></p>
+  <p class="desc">Një token që frymëmerr. Rritet me lindje, zvogëlohet me vdekje. Mbaj 1,000+ dhe hyr në lotarinë ditore — një fitues merr gjithçka. Pa ekip. Pa admin. Vetëm kod, përgjithmonë.</p>
+
+  <div class="badge">
+    <span class="badge-dot"></span>
+    Live on BNB Chain
+  </div>
+
+  <div class="supply-display">
+    <div class="supply-num">8,100,000,000</div>
+    <div class="supply-label">tokens — one for every soul on Earth</div>
+  </div>
+
+  <!-- LOTTERY COUNTDOWN -->
+  <div class="lottery-section">
+    <div class="lottery-label">🎲 Next Lottery Draw</div>
+    <div class="lottery-clock">
+      <div class="lottery-unit">
+        <div class="lottery-num" id="lottH2">--</div>
+        <div class="lottery-sub">hours</div>
+      </div>
+      <div class="lottery-sep">:</div>
+      <div class="lottery-unit">
+        <div class="lottery-num" id="lottM2">--</div>
+        <div class="lottery-sub">min</div>
+      </div>
+      <div class="lottery-sep">:</div>
+      <div class="lottery-unit">
+        <div class="lottery-num" id="lottS2">--</div>
+        <div class="lottery-sub">sec</div>
+      </div>
+    </div>
+    <div class="lottery-info">
+      <div class="lottery-stat">
+        <span class="lottery-stat-label">Prize Pool</span>
+        <span class="lottery-stat-value" id="lottPool2">Loading...</span>
+      </div>
+      <div class="lottery-stat">
+        <span class="lottery-stat-label">Eligible</span>
+        <span class="lottery-stat-value">Hold 1,000+ BINGO</span>
+      </div>
+      <div class="lottery-stat">
+        <span class="lottery-stat-label">Frequency</span>
+        <span class="lottery-stat-value">Every 24 hours</span>
+      </div>
+    </div>
+    <div class="lottery-cta">Every transaction feeds the pool. One winner takes all. 🏆</div>
+  </div>
+
+  <div class="contract-box">
+    <div class="contract-label">Contract Address</div>
+    <div class="contract-addr" id="contractAddr" onclick="copyAddr()">0x5f6e1fF0379e7525c40d746e9FBA8519b3875c28</div>
+    <div class="copied" id="copiedMsg">✓ Copied!</div>
+  </div>
+
+  <div class="chain">
+    <span class="chain-dot"></span>
+    BNB Smart Chain (BEP-20)
+  </div>
+
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">🌍</div>
+      <h3>Supply = Population</h3>
+      <p>+4.3/sec for births, -1.8/sec for deaths. The token breathes with humanity.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🎲</div>
+      <h3>Daily Lottery</h3>
+      <p>Every 24h, one random holder wins the entire prize pool. Hold 1,000+ to play.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🔥</div>
+      <h3>Fully Autonomous</h3>
+      <p>No admin. No updates. No keys. The contract lives on its own, forever.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">💎</div>
+      <h3>8% Transaction Tax</h3>
+      <p>7% feeds the lottery pool. 1% goes to the creator. Simple, transparent.</p>
+    </div>
+  </div>
+
+  <p class="quote">"Every token represents a human. When population grows, BINGO grows. When people die, BINGO shrinks. Hold BINGO, hold a piece of humanity."</p>
+
+  <div class="links">
+    <a href="buy.html">📊 Chart & How to Buy</a>
+    <a href="https://bscscan.com/address/0x5f6e1fF0379e7525c40d746e9FBA8519b3875c28" target="_blank">BscScan</a>
+    <a href="https://pancakeswap.finance/swap?outputCurrency=0x5f6e1fF0379e7525c40d746e9FBA8519b3875c28" target="_blank">PancakeSwap</a>
+    <a href="https://t.me/bingoTOKENN" target="_blank">✈️ Telegram</a>
+  </div>
+
+</div>
+
+<script>
+// Copy contract address
+function copyAddr() {
+  navigator.clipboard.writeText('0x5f6e1fF0379e7525c40d746e9FBA8519b3875c28');
+  const msg = document.getElementById('copiedMsg');
+  msg.style.opacity = '1';
+  setTimeout(() => msg.style.opacity = '0', 2000);
+}
+
+// === LOTTERY COUNTDOWN ===
+const DEPLOY_TIME = 1773007110000; // deploy timestamp
+const DRAW_INTERVAL = 24 * 60 * 60 * 1000;
+const RPC = 'https://bsc-dataseed1.binance.org';
+const TOKEN = '0x5f6e1fF0379e7525c40d746e9FBA8519b3875c28';
+
+function updateCountdown() {
+  const now = Date.now();
+  const elapsed = now - DEPLOY_TIME;
+  const drawsPassed = Math.floor(elapsed / DRAW_INTERVAL);
+  const nextDraw = DEPLOY_TIME + (drawsPassed + 1) * DRAW_INTERVAL;
+  const diff = Math.max(0, nextDraw - now);
+
+  const h = String(Math.floor(diff / 3600000)).padStart(2, '0');
+  const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+  const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
+
+  const hEl = document.getElementById('lottH2');
+  const mEl = document.getElementById('lottM2');
+  const sEl = document.getElementById('lottS2');
+
+  hEl.textContent = h;
+  mEl.textContent = m;
+  if (sEl.textContent !== s) {
+    sEl.style.transform = 'scale(1.05)';
+    setTimeout(() => sEl.style.transform = 'scale(1)', 150);
+    sEl.textContent = s;
+  }
+
+  // Red when < 1 hour
+  if (diff < 3600000) {
+    document.querySelectorAll('.lottery-num').forEach(el => el.style.color = '#ef4444');
+  }
+}
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
+// === PRIZE POOL (from blockchain) ===
+async function fetchPool() {
+  try {
+    const resp = await fetch(RPC, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({jsonrpc:'2.0',id:1,method:'eth_call',params:[{to:TOKEN,data:'0x370158ea'},'latest']})
+    });
+    const json = await resp.json();
+    if (json.result && json.result.length > 10) {
+      const hex = json.result.slice(2);
+      const poolHex = hex.slice(64, 128);
+      const pool = Number(BigInt('0x' + poolHex) / 1000000000000000000n);
+      document.getElementById('lottPool2').textContent = pool.toLocaleString() + ' BINGO';
+    }
+  } catch(e) {
+    // Fallback estimate
+    const elapsed = (Date.now() - DEPLOY_TIME) / 1000;
+    const pool = Math.floor(elapsed * 0.8);
+    document.getElementById('lottPool2').textContent = '~' + pool.toLocaleString() + ' BINGO';
+  }
+}
+fetchPool();
+setInterval(fetchPool, 30000);
+
+// Particles
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+let W, H;
+const particles = [];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+for (let i = 0; i < 60; i++) {
+  particles.push({
+    x: Math.random() * 2000,
+    y: Math.random() * 2000,
+    r: Math.random() * 1.5 + 0.3,
+    dx: (Math.random() - 0.5) * 0.15,
+    dy: (Math.random() - 0.5) * 0.15,
+    a: Math.random() * 0.15 + 0.03,
+  });
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+  particles.forEach(p => {
+    p.x += p.dx;
+    p.y += p.dy;
+    if (p.x < 0) p.x = W;
+    if (p.x > W) p.x = 0;
+    if (p.y < 0) p.y = H;
+    if (p.y > H) p.y = 0;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(245,158,11,${p.a})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(draw);
+}
+draw();
+</script>
+</body>
+</html>

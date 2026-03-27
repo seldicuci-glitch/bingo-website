@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buy BINGO — How to Buy & Live Chart</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050508;
+  --gold: #f59e0b;
+  --gold-light: #fbbf24;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: #e2e8f0;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+/* Back link */
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255,255,255,0.4);
+  text-decoration: none;
+  font-size: 0.85rem;
+  margin-bottom: 32px;
+  transition: color 0.2s;
+}
+.back:hover { color: var(--gold); }
+
+/* Title */
+h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 36px;
+  font-size: 0.95rem;
+}
+
+/* Chart */
+.chart-container {
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.06);
+  margin-bottom: 40px;
+  background: #0c0c12;
+}
+
+.chart-container iframe {
+  width: 100%;
+  height: 420px;
+  border: none;
+}
+
+/* Steps */
+.steps {
+  margin-bottom: 40px;
+}
+
+.steps h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #fff;
+}
+
+.step {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 20px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  transition: border-color 0.3s;
+}
+
+.step:hover {
+  border-color: rgba(245,158,11,0.2);
+}
+
+.step-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--gold);
+  min-width: 40px;
+}
+
+.step-content h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.step-content p {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.6;
+}
+
+.step-content code {
+  background: rgba(245,158,11,0.1);
+  color: var(--gold);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+/* Buy button */
+.buy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, var(--gold), #d97706);
+  color: #000;
+  text-decoration: none;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 16px 36px;
+  border-radius: 12px;
+  transition: all 0.3s;
+  margin-bottom: 40px;
+}
+
+.buy-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(245,158,11,0.3);
+}
+
+/* Contract box */
+.contract-box {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 16px 24px;
+  margin-bottom: 24px;
+}
+
+.contract-label {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.contract-addr {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.8rem;
+  color: var(--gold);
+  word-break: break-all;
+  cursor: pointer;
+}
+
+.copied {
+  font-size: 0.75rem;
+  color: #22c55e;
+  margin-top: 4px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* Warning */
+.warning {
+  background: rgba(239,68,68,0.05);
+  border: 1px solid rgba(239,68,68,0.15);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 32px;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.6;
+}
+
+.warning strong {
+  color: #ef4444;
+}
+
+/* Info boxes */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.info-box {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+}
+
+.info-box .val {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+.info-box .lab {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.3);
+  margin-top: 4px;
+}
+
+@media (max-width: 600px) {
+  h1 { font-size: 1.6rem; }
+  .chart-container iframe { height: 320px; }
+  .info-grid { grid-template-columns: 1fr; }
+  .step { flex-direction: column; gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <a href="index.html" class="back">← Back to BINGO</a>
+
+  <h1>🎰 Buy BINGO Token</h1>
+  <p class="subtitle">Live chart & step-by-step guide to buy on PancakeSwap</p>
+
+  <!-- LIVE CHART -->
+  <div class="chart-container">
+    <iframe src="https://dexscreener.com/bsc/0x8A447abCB2C4A8A77392e88a6556FF68fbe8F4aC?embed=1&theme=dark&trades=0&info=0"></iframe>
+  </div>
+
+  <!-- TOKEN INFO -->
+  <div class="info-grid">
+    <div class="info-box">
+      <div class="val">8.1B</div>
+      <div class="lab">Total Supply</div>
+    </div>
+    <div class="info-box">
+      <div class="val">8%</div>
+      <div class="lab">Transaction Tax</div>
+    </div>
+    <div class="info-box">
+      <div class="val">7%</div>
+      <div class="lab">→ Lottery Pool</div>
+    </div>
+    <div class="info-box">
+      <div class="val">1%</div>
+      <div class="lab">→ Creator</div>
+    </div>
+  </div>
+
+  <!-- BUY BUTTON -->
+  <a href="https://pancakeswap.finance/swap?outputCurrency=0x5f6e1fF0379e7525c40d746e9FBA8519b3875c28" target="_blank" class="buy-btn">
+    🥞 Buy on PancakeSwap
+  </a>
+
+  <!-- HOW TO BUY -->
+  <div class="steps">
+    <h2>How to Buy BINGO</h2>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h3>Get a Wallet</h3>
+        <p>Download <strong>Trust Wallet</strong> or <strong>MetaMask</strong>. Make sure you're on the <strong>BNB Smart Chain</strong> network.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h3>Get BNB</h3>
+        <p>Buy BNB from Binance, KuCoin, or any exchange. Send it to your wallet address on BNB Smart Chain.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h3>Go to PancakeSwap</h3>
+        <p>Open <a href="https://pancakeswap.finance/swap?outputCurrency=0x5f6e1fF0379e7525c40d746e9FBA8519b3875c28" target="_blank" style="color:var(--gold)">PancakeSwap</a> and connect your wallet. BINGO will be pre-selected.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h3>Set Slippage to 9%</h3>
+        <p>Click the ⚙️ settings icon and set slippage to <code>9%</code> or higher. This is needed because BINGO has an 8% transaction tax (7% lottery + 1% creator).</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <h3>Swap BNB → BINGO</h3>
+        <p>Enter how much BNB you want to swap, confirm the transaction, and you're in! Hold <strong>1,000+ BINGO</strong> to be eligible for the daily lottery. 🎲</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTRACT -->
+  <div class="contract-box">
+    <div class="contract-label">Contract Address (copy & paste in PancakeSwap)</div>
+    <div class="contract-addr" onclick="copyAddr()">0x5f6e1fF0379e7525c40d746e9FBA8519b3875c28</div>
+    <div class="copied" id="copiedMsg">✓ Copied!</div>
+  </div>
+
+  <!-- WARNING -->
+  <div class="warning">
+    <strong>⚠️ Important:</strong> BINGO is an experimental token. There is an 8% tax on every transaction (7% goes to the lottery pool, 1% to the creator). Only invest what you can afford to lose. DYOR.
+  </div>
+
+</div>
+
+<script>
+function copyAddr() {
+  navigator.clipboard.writeText('0x5f6e1fF0379e7525c40d746e9FBA8519b3875c28');
+  const msg = document.getElementById('copiedMsg');
+  msg.style.opacity = '1';
+  setTimeout(() => msg.style.opacity = '0', 2000);
+}
+</script>
+</body>
+</html>
